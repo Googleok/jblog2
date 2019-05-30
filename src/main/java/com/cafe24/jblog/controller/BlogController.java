@@ -24,6 +24,9 @@ import com.cafe24.jblog.service.BlogService;
 import com.cafe24.jblog.vo.BlogVo;
 import com.cafe24.jblog.vo.CategoryVo;
 import com.cafe24.jblog.vo.PostVo;
+import com.cafe24.jblog.vo.UserVo;
+import com.cafe24.security.Auth;
+import com.cafe24.security.AuthUser;
 
 @Controller
 @RequestMapping("/{id:(?!assets.*).*}" )	// assets 으로 시작하는 모든것들이 다 들어오지 않는다.
@@ -58,10 +61,11 @@ public class BlogController {
 		if(blogVo == null) {
 			return "redirect:/main?result=fail";
 		}
-		List<CategoryVo> categoryList = blogService.getCategoryList(id);
 		
+		List<CategoryVo> categoryList = blogService.getCategoryList(id);
 		List<PostVo> postList = blogService.getPostList(id, categoryNo);
 		PostVo postOne = blogService.getPostOne(id, categoryNo, postNo);
+		
 		if(postNo == 0L) {
 			postOne = blogService.getFirstPostOne(id, categoryNo);
 		}
@@ -73,12 +77,17 @@ public class BlogController {
 		return "/blog/blog-main";
 	}
 	
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value = "/admin/basic", method = RequestMethod.GET)
-	public String basic(@PathVariable String id, Model model) {
+	public String basic(@PathVariable String id, @AuthUser UserVo userVo,Model model) {
+		if(!userVo.getId().equals(id)) {
+			return "redirect:/";
+		}
 		model.addAttribute("blogId", id);
 		return "/blog/blog-admin-basic";
 	}
 
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value = "/admin/basic", method = RequestMethod.POST)
 	public String basic(
 			@RequestParam(value = "id", required = true, defaultValue = "") String id,
@@ -91,19 +100,27 @@ public class BlogController {
 		return "redirect:/"+id;
 	}
 
-	
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value = "/admin/category", method = RequestMethod.GET)
-	public String category(@PathVariable String id) {
+	public String category(@PathVariable String id, @AuthUser UserVo userVo) {
+		if(!userVo.getId().equals(id)) {
+			return "redirect:/";
+		}
 		return "/blog/blog-admin-category";
 	}
 	
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value = "/admin/category/add")
 	@ResponseBody
 	public String ajax_addCategory(
 				@PathVariable String id,
 				@RequestParam(value = "name", required = true, defaultValue = "") String name,
-				@RequestParam(value = "description", required = true, defaultValue = "") String description
+				@RequestParam(value = "description", required = true, defaultValue = "") String description,
+				@AuthUser UserVo userVo
 			) {
+		if(!userVo.getId().equals(id)) {
+			return "redirect:/";
+		}
 		boolean result = blogService.addCategory(id, name, description);
 		if(result == false) {
 			return "fail";
@@ -111,12 +128,17 @@ public class BlogController {
 		return "success";
 	}
 	
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value = "/admin/category/delete/{no}")
 	@ResponseBody
 	public String ajax_deleteCategory(
 				@PathVariable String id,
-				@PathVariable(value="no") Long no
+				@PathVariable(value="no") Long no,
+				@AuthUser UserVo userVo
 			) {
+		if(!userVo.getId().equals(id)) {
+			return "redirect:/";
+		}
 		boolean result = blogService.deleteCategory(no);
 		if(result == false) {
 			return "fail";
@@ -124,6 +146,7 @@ public class BlogController {
 		return "success";
 	}
 	
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value = "/admin/category/get", produces="application/json; charset=utf8")
 	@ResponseBody
 	public ResponseEntity<Object> ajax_categoryList(
@@ -145,13 +168,18 @@ public class BlogController {
         return new ResponseEntity<Object>(json.toString(), responseHeaders, HttpStatus.CREATED);
 	}
 	
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value = "/admin/write", method = RequestMethod.GET)
-	public String write(@PathVariable String id, Model model) {
+	public String write(@PathVariable String id, Model model, @AuthUser UserVo userVo) {
+		if(!userVo.getId().equals(id)) {
+			return "redirect:/";
+		}
 		List<CategoryVo> categoryList = blogService.getCategoryList(id);
 		model.addAttribute("list", categoryList);
 		return "/blog/blog-admin-write";
 	}
 	
+	@Auth(role=Auth.Role.USER)
 	@RequestMapping(value = "/admin/write", method = RequestMethod.POST)
 	public String write(
 			@PathVariable String id,

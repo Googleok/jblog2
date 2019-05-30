@@ -1,8 +1,13 @@
 package com.cafe24.jblog.vo;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class PostVo {
 	private Long no;
+	@NotBlank
 	private String title;
+	@NotEmpty
 	private String contents;
 	private String regDate;
 	private Long categoryNo;
