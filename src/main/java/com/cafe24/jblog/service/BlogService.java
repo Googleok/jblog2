@@ -42,7 +42,7 @@ public class BlogService {
 		return blogDao.update(vo);
 	}
 
-	public boolean addCategory(String id, String name, String description) {
+	public Boolean addCategory(String id, String name, String description) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", id);
 		map.put("name", name);
@@ -50,5 +50,34 @@ public class BlogService {
 		return categoryDao.insert(map);
 	}
 
+	public Boolean deleteCategory(Long no) {
+		return categoryDao.delete(no);
+	}
+
+	public Boolean write(String title, String category, String contents) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("title", title);
+		map.put("category", category);
+		map.put("contents", contents);
+		return postDao.write(map);
+	}
+
+	public Boolean updateCategoryCount(String category, String id) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("category", category);
+		map.put("id", id);
+		return categoryDao.updateCategoryUpCount(map);
+	}
+
+	public PostVo getPostOne(Long categoryNo, Long postNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("categoryNo", categoryNo);
+		map.put("postNo", postNo);
+		return postDao.getPostOne(map);
+	}
+
+	public PostVo getFirstPostOne(Long categoryNo) {
+		return postDao.getFirstPostOne(categoryNo);
+	}
 
 }

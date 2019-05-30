@@ -7,7 +7,7 @@
 
 	<select id="getCategoryList" resultType="categoryvo" parameterType="string">
 		<![CDATA[
-		select no, name, description, reg_date as regDate, blog_id as blogId
+		select no, name, description, reg_date as regDate, blog_id as blogId, count
 			 from category where blog_id=#{id}
 			 	order by no asc
 		]]>
@@ -19,4 +19,16 @@
 			values(null, #{name}, #{description}, now(), #{id})
 		]]>
 	</insert>
+	<delete id="delete" parameterType="Long">
+		<![CDATA[
+			delete from category
+				where no = #{no}	
+		]]>
+	</delete>
+	<update id="updateCategoryCount" parameterType="map">
+		<![CDATA[
+			update category set count = count + 1 
+				where blog_id = #{id} and name = #{category}		
+		]]>
+	</update>
 </mapper>

@@ -6,8 +6,30 @@
 <mapper namespace="post">
 
 	<select id="getPostList" resultType="postvo" parameterType="Long">
+		<![CDATA[
 		select no, title, contents, reg_date as regDate, category_no as categoryNo
 			 from post where category_no=#{categoryNo}
 			 	order by reg_date desc
+		]]>
+	</select>
+	<insert id="write" parameterType="map">
+		<![CDATA[
+		insert into post values(null, #{title}, #{contents}, now(),
+					 (select no from category where name = #{category}))	
+		]]>
+	</insert>
+	
+	<select id="getPostOne" resultType="postvo" parameterType="map">
+		<![CDATA[
+		select no, title, contents, reg_date as regDate, category_no as categoryNo
+			 from post where category_no=#{categoryNo} and no = #{postNo}
+		]]>
+	</select>
+	
+	<select id="getFirstPostOne" resultType="postvo" parameterType="Long">
+		<![CDATA[
+		select no, title, contents, reg_date as regDate, category_no as categoryNo
+			 from post where category_no=#{categoryNo} LIMIT 0,1
+		]]>
 	</select>
 </mapper>

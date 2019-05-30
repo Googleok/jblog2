@@ -33,7 +33,7 @@
 					<c:param name="menu" value="setting" />
 				</c:import>
 				<form
-					action="${pageContext.request.contextPath}/${authUser.id}/basic"
+					action="${pageContext.request.contextPath}/${authUser.id}/admin/basic"
 					method="post" enctype="multipart/form-data">
 					<input type="hidden" name="id" value="${blogId}">
 					<table class="admin-config">

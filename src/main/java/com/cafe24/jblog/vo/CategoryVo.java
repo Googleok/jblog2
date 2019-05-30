@@ -45,6 +45,7 @@ public class CategoryVo {
 	public void setPostCount(int postCount) {
 		this.postCount = postCount;
 	}
+	
 	@Override
 	public String toString() {
 		return "CategoryVo [no=" + no + ", name=" + name + ", description=" + description + ", regDate=" + regDate

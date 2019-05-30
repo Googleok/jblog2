@@ -1,12 +1,7 @@
 package com.cafe24.jblog.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -60,28 +54,31 @@ public class BlogController {
 		}else {
 			categoryNo = 1L;
 		}
-		
 		BlogVo blogVo = blogService.getBlogById(id);
 		if(blogVo == null) {
 			return "redirect:/main?result=fail";
 		}
-		System.out.println(blogVo);
-//		List<CategoryVo> categoryList = blogService.getCategoryList(id);
-//		List<PostVo> postList = blogService.getPostList(categoryNo);
+		List<CategoryVo> categoryList = blogService.getCategoryList(id);
+		List<PostVo> postList = blogService.getPostList(categoryNo);
+		PostVo postOne = blogService.getPostOne(categoryNo, postNo);
+		if(postNo == 0L) {
+			postOne = blogService.getFirstPostOne(categoryNo);
+		}
 		
 		modelMap.addAttribute("blogVo", blogVo);
-//		modelMap.addAttribute("categoryList", categoryList);
-//		modelMap.addAttribute("postList", postList);
-	
+		modelMap.addAttribute("categoryList", categoryList);
+		modelMap.addAttribute("postList", postList);
+		modelMap.addAttribute("postOne", postOne);
 		return "/blog/blog-main";
 	}
-	@RequestMapping(value = "/basic", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "/admin/basic", method = RequestMethod.GET)
 	public String basic(@PathVariable String id, Model model) {
 		model.addAttribute("blogId", id);
 		return "/blog/blog-admin-basic";
 	}
 
-	@RequestMapping(value = "/basic", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/basic", method = RequestMethod.POST)
 	public String basic(
 			@RequestParam(value = "id", required = true, defaultValue = "") String id,
 			@RequestParam(value = "title", required = true, defaultValue = "") String title,
@@ -94,13 +91,12 @@ public class BlogController {
 	}
 
 	
-	@RequestMapping(value = "/category", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/category", method = RequestMethod.GET)
 	public String category(@PathVariable String id) {
-		
 		return "/blog/blog-admin-category";
 	}
 	
-	@RequestMapping(value = "/category/add")
+	@RequestMapping(value = "/admin/category/add")
 	@ResponseBody
 	public String ajax_addCategory(
 				@PathVariable String id,
@@ -114,12 +110,24 @@ public class BlogController {
 		return "success";
 	}
 	
-	@RequestMapping(value = "/category/get", produces="application/json; charset=utf8")
+	@RequestMapping(value = "/admin/category/delete/{no}")
+	@ResponseBody
+	public String ajax_deleteCategory(
+				@PathVariable String id,
+				@PathVariable(value="no") Long no
+			) {
+		boolean result = blogService.deleteCategory(no);
+		if(result == false) {
+			return "fail";
+		}
+		return "success";
+	}
+	
+	@RequestMapping(value = "/admin/category/get", produces="application/json; charset=utf8")
 	@ResponseBody
 	public ResponseEntity<Object> ajax_categoryList(
 				@PathVariable String id
 			) {
-		System.out.println("id="+id);
 		HttpHeaders responseHeaders = new HttpHeaders();
 		List<CategoryVo> categoryList = blogService.getCategoryList(id);
 		JSONArray json = new JSONArray();  
@@ -129,16 +137,31 @@ public class BlogController {
             	jsonObject.put("no", categoryList.get(i).getNo());
             	jsonObject.put("name", categoryList.get(i).getName());
             	jsonObject.put("description", categoryList.get(i).getDescription());
+            	jsonObject.put("count", categoryList.get(i).getPostCount());
                 json.put(jsonObject);
             }
         }
-		System.out.println(json.toString());
         return new ResponseEntity<Object>(json.toString(), responseHeaders, HttpStatus.CREATED);
 	}
 	
-	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public String write(@PathVariable String id) {
-		
+	@RequestMapping(value = "/admin/write", method = RequestMethod.GET)
+	public String write(@PathVariable String id, Model model) {
+		List<CategoryVo> categoryList = blogService.getCategoryList(id);
+		model.addAttribute("list", categoryList);
 		return "/blog/blog-admin-write";
+	}
+	
+	@RequestMapping(value = "/admin/write", method = RequestMethod.POST)
+	public String write(
+			@PathVariable String id,
+			@RequestParam(value = "title", required = true, defaultValue = "") String title,
+			@RequestParam(value = "category", required = true, defaultValue = "") String category,
+			@RequestParam(value = "contents", required = true, defaultValue = "") String contents,
+			Model model
+	) {
+		if(blogService.write(title, category, contents)) {
+			blogService.updateCategoryCount(category, id);
+		}
+		return "redirect:/"+id;
 	}
 }

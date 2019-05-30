@@ -23,4 +23,15 @@ public class CategoryDao {
 		int count = sqlSession.insert("category.insert", map);
 		return count == 1;
 	}
+
+	public boolean delete(Long no) {
+		int count = sqlSession.delete("category.delete", no);
+		return count == 1;
+	}
+
+	public Boolean updateCategoryUpCount(Map<String, Object> map) {
+		int count = sqlSession.update("category.updateCategoryCount", map);
+		return count == 1;
+	}
+
 }
