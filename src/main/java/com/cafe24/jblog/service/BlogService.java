@@ -1,6 +1,8 @@
 package com.cafe24.jblog.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,14 @@ public class BlogService {
 
 	public Boolean update(BlogVo vo) {
 		return blogDao.update(vo);
+	}
+
+	public boolean addCategory(String id, String name, String description) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("name", name);
+		map.put("description", description);
+		return categoryDao.insert(map);
 	}
 
 

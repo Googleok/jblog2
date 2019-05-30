@@ -50,7 +50,8 @@ http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- 가상 이미지 폴더를 만들어 줌 -->
 	<!-- the mvc resources url mapping -->
-	<mvc:resources mapping="/assets/images/**"
+	<!-- assets 랑 충돌 되서 -->
+	<mvc:resources mapping="/assets-upload/images/**"
 		location="file:/jblog-uploads/" />
 
 	<!-- 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->

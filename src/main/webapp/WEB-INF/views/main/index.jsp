@@ -12,7 +12,6 @@
 <body>
 	<div class="center-content">
 	<c:import url='/WEB-INF/views/includes/header.jsp' />	
-		
 		<form class="search-form">
 			<fieldset>
 				<input type="text" name="keyword" />

@@ -6,9 +6,17 @@
 <mapper namespace="category">
 
 	<select id="getCategoryList" resultType="categoryvo" parameterType="string">
+		<![CDATA[
 		select no, name, description, reg_date as regDate, blog_id as blogId
 			 from category where blog_id=#{id}
 			 	order by no asc
+		]]>
 	</select>
 
+	<insert id="insert" parameterType="map">
+		<![CDATA[
+		insert into category
+			values(null, #{name}, #{description}, now(), #{id})
+		]]>
+	</insert>
 </mapper>
