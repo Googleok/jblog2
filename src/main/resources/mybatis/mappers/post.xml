@@ -5,11 +5,11 @@
 
 <mapper namespace="post">
 
-	<select id="getPostList" resultType="postvo" parameterType="Long">
+	<select id="getPostList" resultType="postvo" parameterType="map">
 		<![CDATA[
-		select no, title, contents, reg_date as regDate, category_no as categoryNo
-			 from post where category_no=#{categoryNo}
-			 	order by reg_date desc
+		select a.no, a.title, a.contents, a.reg_date as regDate, a.category_no as categoryNo
+			 from post a, category b where a.category_no = b.no and a.category_no=#{categoryNo} and b.blog_id = #{id}
+			 	order by a.reg_date desc
 		]]>
 	</select>
 	<insert id="write" parameterType="map">
@@ -21,15 +21,19 @@
 	
 	<select id="getPostOne" resultType="postvo" parameterType="map">
 		<![CDATA[
-		select no, title, contents, reg_date as regDate, category_no as categoryNo
-			 from post where category_no=#{categoryNo} and no = #{postNo}
+		select a.no, a.title, a.contents, a.reg_date as regDate, a.category_no as categoryNo
+			 from post a, category b where a.category_no = b.no
+			 			 and a.category_no=#{categoryNo} and a.no = #{postNo}
+			 			 	and b.blog_id = #{id}
 		]]>
 	</select>
 	
-	<select id="getFirstPostOne" resultType="postvo" parameterType="Long">
+	<select id="getFirstPostOne" resultType="postvo" parameterType="map">
 		<![CDATA[
-		select no, title, contents, reg_date as regDate, category_no as categoryNo
-			 from post where category_no=#{categoryNo} LIMIT 0,1
+		select a.no, a.title, a.contents, a.reg_date as regDate, a.category_no as categoryNo
+			 from post a, category b where a.category_no = b.no and a.category_no=#{categoryNo}
+			 					and b.blog_id=#{id} LIMIT 0,1
 		]]>
 	</select>
+
 </mapper>

@@ -16,7 +16,7 @@
 	<insert id="insert" parameterType="map">
 		<![CDATA[
 		insert into category
-			values(null, #{name}, #{description}, now(), #{id})
+			values(null, #{name}, #{description}, now(), #{id}, 0)
 		]]>
 	</insert>
 	<delete id="delete" parameterType="Long">
@@ -31,4 +31,10 @@
 				where blog_id = #{id} and name = #{category}		
 		]]>
 	</update>
+	
+	<select id="getExistCategoryNum" resultType="Long" parameterType="string">
+		<![CDATA[
+			select no from category where blog_id=#{id} order by no asc limit 0,1 		
+		]]>
+	</select>
 </mapper>

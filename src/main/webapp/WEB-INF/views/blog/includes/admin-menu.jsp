@@ -6,23 +6,23 @@
 			<c:choose>
 				<c:when test='${param.menu == "setting" }'>
 					<li class="selected">기본설정</li>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/category">카테고리</a></li>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/write">글작성</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/category">카테고리</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/write">글작성</a></li>
 				</c:when>
 				<c:when test='${param.menu == "category" }'>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/basic">기본설정</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/basic">기본설정</a></li>
 					<li class="selected">카테고리</li>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/write">글작성</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/write">글작성</a></li>
 				</c:when>
 				<c:when test='${param.menu == "write" }'>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/basic">기본설정</a></li>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/category">카테고리</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/basic">기본설정</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/category">카테고리</a></li>
 					<li class="selected">글작성</li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/basic">기본설정</a></li>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/category">카테고리</a></li>
-					<li><a href="${pageContext.request.contextPath}/${authUser.id}/write">글작성</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/basic">기본설정</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/category">카테고리</a></li>
+					<li><a href="${pageContext.request.contextPath}/${authUser.id}/admin/write">글작성</a></li>
 				</c:otherwise>					
 			</c:choose>
 		</ul>

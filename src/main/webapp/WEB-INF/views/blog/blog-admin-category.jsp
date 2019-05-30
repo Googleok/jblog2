@@ -35,7 +35,7 @@
 			      		</tr>
 			      		<tr>
 			      			<td class="s">&nbsp;</td>
-			      			<td><input type="button" onclick="fn_category_add()" value="카테고리 추가"></td>
+			      			<td><input type="button" onclick="category.category_add()" value="카테고리 추가"></td>
 			      		</tr>      		      		
 			      	</table> 
 		      	</form>
@@ -46,101 +46,11 @@
 <script type="text/javascript">
 var authUser = '${authUser.id}';
 var context_path = '${pageContext.request.contextPath}';
-
-// 카테고리 등록
-function fn_category_add() {
-	$.ajax({
-		type:"post",
-		url: context_path + "/" + authUser + "/admin/category/add",
-		data: $("#categoryForm").serialize(),
-		success : function (data) {
-			if(data=="success")
-			{
-				getCategoryList();
-				$("#name").val("");
-				$("#description").val("");
-			}
-		},
-		error: function (request, status, error) {
-			alert(status);
-		}
-	});
-}
-
-//카테고리 삭제
-function fn_category_delete(data) {
-	var categoryNo = data;
-	$.ajax({
-		type:"get",
-		url: context_path + "/" + authUser + "/admin/category/delete/"+ categoryNo,
-		success : function (data) {
-			if(data=="success")
-			{
-				getCategoryList();
-				$("#name").val("");
-				$("#description").val("");
-			}
-		},
-		error: function (request, status, error) {
-			alert(status);
-		}
-	});
-}
-
-
 // 초기 페이지 로딩시 불러오기
 $(function () {
-	getCategoryList();
+	category.category_get();
 });
-
-// 카테고리 불러오기
-
-function getCategoryList() {
-
-	$.ajax({
-		type:'GET',
-		url : context_path + "/" + authUser + "/admin/category/get",
-		dataType: "json",
-		data: $("#categoryForm").serialize(),
-		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
-		success : function (data) {
-			var category = JSON.parse(data)
-			var html = "";
-			html += "<table class='admin-cat'>";
-			html += "<tr>";
-  			html += "<th>번호</th>"
-  			html += "<th>카테고리명</th>"
-  			html += "<th>포스트 수</th>"
-  			html += "<th>설명</th>"
-  			html += "<th>삭제</th>"
-  			html += "</tr>";
-			if(category.length > 0){
-				for (var i = 0; i < category.length; i++) {
-					html += "<tr>";
-					html += "<td>"+ (i+1) +"</td>";
-					html += "<td>"+ category[i].name + "</td>";
-					html += "<td>"+ category[i].count + "</td>";
-					html += "<td>"+ category[i].description + "</td>";
-					html += '<td>';
-					html += '<form id="deleteForm" name="deleteForm" method="gey">'
-					html += '<input type="image" src="/jblog2/assets/images/delete.jpg" onclick="fn_category_delete('+category[i].no+')">'
-					html += '</td>';
-					html += '</form>'
-					html += "</tr>";						
-				}
-			}else{
-				html += "<tr>";
-				html += "<td colspan='5' style='text-align:center;'>카테고리가 없습니다.</td>";
-				html += "</tr>";		
-			}
-			html += "</table>";
-		    $("#categoryList").html(html);
-		},
-		error: function (request, status, error) {
-			console.log("status", status);
-		}
-	});
-}
 </script>
+<script src="${pageContext.servletContext.contextPath }/assets/js/fn-category.js"></script>	
 </body>
 </html>

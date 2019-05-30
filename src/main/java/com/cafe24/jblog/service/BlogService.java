@@ -34,8 +34,11 @@ public class BlogService {
 		return categoryDao.getCategoryList(id);
 	}
 
-	public List<PostVo> getPostList(Long categoryNo) {
-		return postDao.getPostList(categoryNo);
+	public List<PostVo> getPostList(String id, Long categoryNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("categoryNo", categoryNo);
+		return postDao.getPostList(map);
 	}
 
 	public Boolean update(BlogVo vo) {
@@ -69,15 +72,27 @@ public class BlogService {
 		return categoryDao.updateCategoryUpCount(map);
 	}
 
-	public PostVo getPostOne(Long categoryNo, Long postNo) {
+	public PostVo getPostOne(String id, Long categoryNo, Long postNo) {
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
 		map.put("categoryNo", categoryNo);
 		map.put("postNo", postNo);
 		return postDao.getPostOne(map);
 	}
 
-	public PostVo getFirstPostOne(Long categoryNo) {
-		return postDao.getFirstPostOne(categoryNo);
+	public PostVo getFirstPostOne(String id, Long categoryNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("categoryNo", categoryNo);
+		return postDao.getFirstPostOne(map);
+	}
+
+	public Long getExistCategoryNum(String id) {
+		Long num = categoryDao.getExistCategoryNum(id);
+		if(num == null) {
+			num = 1L;
+		}
+		return num;
 	}
 
 }

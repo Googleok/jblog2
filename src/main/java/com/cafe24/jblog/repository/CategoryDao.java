@@ -34,4 +34,8 @@ public class CategoryDao {
 		return count == 1;
 	}
 
+	public Long getExistCategoryNum(String id) {
+		return sqlSession.selectOne("category.getExistCategoryNum", id);
+	}
+
 }

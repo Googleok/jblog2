@@ -34,7 +34,6 @@ public class BlogController {
 
 	@Autowired
 	private FileuploadService fileUploadService;
-
 	
 	@RequestMapping({"", "/{pathNo1}", "/{pathNo1}/{pathNo2}"})
 	public String index(
@@ -52,17 +51,19 @@ public class BlogController {
 		}else if(pathNo1.isPresent()) {
 			categoryNo = pathNo1.get();
 		}else {
-			categoryNo = 1L;
+			categoryNo = blogService.getExistCategoryNum(id);
 		}
+		System.out.println(categoryNo);
 		BlogVo blogVo = blogService.getBlogById(id);
 		if(blogVo == null) {
 			return "redirect:/main?result=fail";
 		}
 		List<CategoryVo> categoryList = blogService.getCategoryList(id);
-		List<PostVo> postList = blogService.getPostList(categoryNo);
-		PostVo postOne = blogService.getPostOne(categoryNo, postNo);
+		
+		List<PostVo> postList = blogService.getPostList(id, categoryNo);
+		PostVo postOne = blogService.getPostOne(id, categoryNo, postNo);
 		if(postNo == 0L) {
-			postOne = blogService.getFirstPostOne(categoryNo);
+			postOne = blogService.getFirstPostOne(id, categoryNo);
 		}
 		
 		modelMap.addAttribute("blogVo", blogVo);

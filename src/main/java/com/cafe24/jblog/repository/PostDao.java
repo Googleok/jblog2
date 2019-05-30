@@ -15,8 +15,8 @@ public class PostDao {
 	@Autowired
 	private SqlSession sqlSession;
 
-	public List<PostVo> getPostList(Long categoryNo) {
-		return sqlSession.selectList("post.getPostList", categoryNo);
+	public List<PostVo> getPostList(Map<String, Object> map) {
+		return sqlSession.selectList("post.getPostList", map);
 	}
 
 	public Boolean write(Map<String, Object> map) {
@@ -28,7 +28,8 @@ public class PostDao {
 		return sqlSession.selectOne("post.getPostOne", map);
 	}
 
-	public PostVo getFirstPostOne(Long categoryNo) {
-		return sqlSession.selectOne("post.getFirstPostOne", categoryNo);
+	public PostVo getFirstPostOne(Map<String, Object> map) {
+		return sqlSession.selectOne("post.getFirstPostOne", map);
 	}
+	
 }
