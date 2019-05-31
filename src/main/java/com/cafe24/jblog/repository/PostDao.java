@@ -31,5 +31,11 @@ public class PostDao {
 	public PostVo getFirstPostOne(Map<String, Object> map) {
 		return sqlSession.selectOne("post.getFirstPostOne", map);
 	}
+
+	public void deletePostByCategoryNo(Long no) {
+		sqlSession.delete("post.deletePostByCategoryNo", no);	// delete 된 행의 개수
+	}
+
+
 	
 }

@@ -54,6 +54,7 @@ public class BlogService {
 	}
 
 	public Boolean deleteCategory(Long no) {
+		postDao.deletePostByCategoryNo(no);
 		return categoryDao.delete(no);
 	}
 

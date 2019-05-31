@@ -18,41 +18,7 @@
 				<c:import url='/WEB-INF/views/blog/includes/admin-menu.jsp'>
 					<c:param name="menu" value="write" />
 				</c:import>
-		<%-- 		
-			<form:form
-				modelAttribute="postVo"
-				name="postForm"
-				method="post"
-				action="${pageContext.request.contextPath}/${authUser.id}/admin/write">
-					<table class="admin-cat-write">
-			      		<tr>
-			      			<td class="t">제목</td>
-			      			<td>
-			      				<form:input path="title" size="60"/>
-			      				<form:select path="category">
-						      		<form:options items="${list }" />
-			      				</form:select> 
-			      				<p style="font-weight:bold; color:#f00; text-align:left; padding:0; margin:0 ">
-									<form:errors path="title" />
-								</p>
-				      		</td>
-			      		</tr>
-			      		<tr>
-			      			<td class="t">내용</td>
-			      			<td>
-			      				<form:textarea path="contents"/>
-			      				<p style="font-weight:bold; color:#f00; text-align:left; padding:0; margin:0 ">
-									<form:errors path="contents" />
-								</p>
-			      			</td>
-			      		</tr>
-			      		<tr>
-			      			<td>&nbsp;</td>
-			      			<td class="s"><input type="submit" value="포스트하기"></td>
-			      		</tr>
-			      	</table>
-				</form:form>
-	 --%>		
+		
 				<form action="${pageContext.request.contextPath}/${authUser.id}/admin/write" method="post">
 			      	<table class="admin-cat-write">
 			      		<tr>

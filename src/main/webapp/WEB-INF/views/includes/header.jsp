@@ -10,7 +10,6 @@
 					<li><a href="${pageContext.request.contextPath}/user/join">회원가입</a><li>
 				</c:when>
 				<c:otherwise>
-					<li><a href="${pageContext.request.contextPath}/user/update">회원정보수정</a><li>
 					<li><a href="${pageContext.request.contextPath}/user/logout">로그아웃</a><li>
 					<li><a href="${pageContext.request.contextPath}/${authUser.id}">내블로그</a></li>
 				</c:otherwise>
